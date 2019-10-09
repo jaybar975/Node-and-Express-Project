@@ -4,10 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+
 var okta = require("@okta/okta-sdk-nodejs");
 var ExpressOIDC = require("@okta/oidc-middleware").ExpressOIDC;
+
 const dashboardRouter = require("./routes/dashboard");         
 const publicRouter = require("./routes/public");
+const usersRouter = require("./routes/users");
 
 var app = express();
 var oktaClient = new okta.Client({
@@ -16,8 +19,8 @@ var oktaClient = new okta.Client({
 });
 const oidc = new ExpressOIDC({
   issuer: "{https://dev-838117.okta.com}/oauth2/default",
-  client_id: {yourClientId},
-  client_secret: {yourClientSecret},
+  client_id: '{0oa1jeyi5b1TIjvz1357}',
+  client_secret: '{tSDQ-q4iEBHklvVn0qunsqieWQNQESPnXLqzU0Fr}',
   redirect_uri: 'http://localhost:3000/users/callback',
   scope: "openid profile",
   routes: {
@@ -63,6 +66,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', publicRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
